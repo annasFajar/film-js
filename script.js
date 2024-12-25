@@ -45,7 +45,7 @@ function modal(a) {
 }
 
 function getDetail(l) {
-    return fetch('http://www.omdbapi.com/?apikey=1eb9c0a5&i=' + l)
+    return fetch('https://www.omdbapi.com/?apikey=1eb9c0a5&i=' + l)
     .then(resposne => resposne.json())
     .then(response => response);
 };
