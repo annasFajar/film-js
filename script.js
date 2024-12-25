@@ -2,7 +2,7 @@ const btnSearch = document.querySelector('.btn-search');
 
 // api init
 function imdbapi(m) {
-    return fetch('http://www.omdbapi.com/?apikey=1eb9c0a5&s=' + m)
+    return fetch('https://www.omdbapi.com/?apikey=1eb9c0a5&s=' + m)
     .then(response => response.json())
     .then(response => response)
 }
