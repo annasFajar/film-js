@@ -1,21 +1,44 @@
 const btnSearch = document.querySelector('.btn-search');
 
-// api init
-function imdbapi(m) {
-    return fetch('https://www.omdbapi.com/?apikey=1eb9c0a5&s=' + m)
-    .then(response => response.json())
-    .then(response => response)
-}
+
+
+
 
 // search api sesuai inputan 
 btnSearch.addEventListener('click', async function() {
-    
-    const inputSearch = document.querySelector('.input-search');
-    const hasilSearch = await imdbapi(inputSearch.value);
-    const movies = hasilSearch.Search
-    const resolved = funcMovies(movies)
-    return resolved
+    try {
+        const inputSearch = document.querySelector('.input-search');
+        const hasilSearch = await imdbapi(inputSearch.value);
+        const resolved = funcMovies(hasilSearch)
+        return resolved
+    } catch (error) {
+        console.log(error)
+    }
 });
+
+// api init
+function imdbapi (m) {
+    return fetch('https://www.omdbapi.com/?apikey=1eb9c0a5&s=' + m)
+    .then(res => {
+            // cek apikey
+            if (!res.ok) {
+                console.log(res)
+                alert(Error(`apikey salah ${res.status}`))
+                throw new Error(`apikey salah ${res.status}`);
+            }
+            return res.json()
+    })
+    .then(res => {
+        // cek undefined movie
+        if (res.Response === 'False') {
+            console.log(res)
+            alert(res.Error)
+            throw new Error(res.Error);
+        }
+        console.log(res)
+        return res.Search
+    })
+}
 
 
 const funcMovies = (movies) => {
@@ -59,43 +82,6 @@ function updateDetail(detail) {
     modal.innerHTML= isiModal;
 }
 
-
-
-// fetch('http://www.omdbapi.com/?apikey=1eb9c0a5&s=' + inputSearch.value)
-//     .then(resposne => resposne.json())
-//     .then(response => {
-
-//         const search = response.Search;
-//         const movieContainer = document.querySelector('.movie-container');
-//         let cards = '';
-        
-//         search.forEach(movies => {
-//             cards += fungsiCards(movies);
-            
-//             movieContainer.innerHTML= cards;
-//         });
-
-//         const modalDetailButton = document.querySelectorAll('.modal-detail-button');
-//         modalDetailButton.forEach(modal => {
-//             modal.addEventListener('click', function() {
-//                 const imdbid = this.dataset.imdbid;
-//                 let isiModal = '';
-//                 const modal = document.querySelector('.col-md');
-//                 const gambar = document.querySelector('.col-md-3');
-
-//                 fetch('http://www.omdbapi.com/?apikey=1eb9c0a5&i=' + imdbid)
-//                     .then(r => r.json())
-//                     .then(m => {
-//                         isiModal += fungsiModal(m);
-                        
-//                         gambar.innerHTML= `<img src="${m.Poster}" class="img-fluid">`
-//                         modal.innerHTML= isiModal;
-//                     })
-
-                
-//             })
-//         })
-//     });
 
 function fungsiCards(c) {
     return `<div class="col-md-4 my-3">
